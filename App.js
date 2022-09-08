@@ -19,6 +19,10 @@ const rotationAnimation = keyframes`
   }
 `;
 
+const Emoji = styled.span`
+  font-size: 36px;
+`;
+
 const Box = styled.div`
   height: 200px;
   width: 200px;
@@ -27,25 +31,17 @@ const Box = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  //<span>☺</span>은 styled component 안에 있지 않음
-  //Box안에 있는 span 선택할 수 있는 방법
-  span {
-    font-size: 36px;
-    &:hover {
-      font-size: 48px;
-    }
-    &:active {
-      opacity: 0;
-    }
+  //span에 의존하고 싶지 않을 때
+  ${Emoji}:hover {
+    font-size: 98px;
   }
-  //&:hover는 여기에서 span:hover와 뜻이 같음
 `;
 
 function App() {
   return (
     <Wrapper>
       <Box>
-        <span>☺</span>
+        <Emoji as="p">☺</Emoji>
       </Box>
     </Wrapper>
   );
