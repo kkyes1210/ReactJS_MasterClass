@@ -1,41 +1,53 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
-const Father = styled.div`
+const Wrapper = styled.div`
   display: flex;
 `;
 
-//1. 컴포넌트의 태그를 바꾸고 싶은데 스타일은 바꾸고 싶지 않을때
-const Btn = styled.button`
-  color: white;
-  background-color: tomato;
-  border: 0;
-  border-radius: 15px;
+const rotationAnimation = keyframes`
+  0% {
+    transform:rotate(0deg);
+    border-radius:0px;
+  }
+  50% {
+    transform:rotate(360deg);
+    border-radius:100px;
+  }
+  100% {
+    transform:rotate(0deg);
+    border-radius:0px;
+  }
 `;
-//컴포넌트 타입은 button이므로 적절하지 않음
-//const Link = styled(Btn);
 
-//2. 컴포넌트를 생성할 때, 속성값을 설정할 수 있게 해줌
-//그렇지 않으면, 코드는 불필요하게 길게 작성이 될것
-//<input required/>
-//<input required/>
-//<input required/>
-//<input required/>
-const Input = styled.input.attrs({ required: true, minLength: "10" })`
+const Box = styled.div`
+  height: 200px;
+  width: 200px;
   background-color: tomato;
+  animation: ${rotationAnimation} 1s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //<span>☺</span>은 styled component 안에 있지 않음
+  //Box안에 있는 span 선택할 수 있는 방법
+  span {
+    font-size: 36px;
+    &:hover {
+      font-size: 48px;
+    }
+    &:active {
+      opacity: 0;
+    }
+  }
+  //&:hover는 여기에서 span:hover와 뜻이 같음
 `;
 
 function App() {
   return (
-    <Father>
-      <Btn>Log in</Btn>
-      <Btn as="a" href="/">
-        Log in
-      </Btn>
-      <Input />
-      <Input />
-      <Input />
-      <Input />
-    </Father>
+    <Wrapper>
+      <Box>
+        <span>☺</span>
+      </Box>
+    </Wrapper>
   );
 }
 
