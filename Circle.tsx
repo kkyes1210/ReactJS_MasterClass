@@ -5,35 +5,32 @@ const Container = styled.div<ContainerProps>`
   height: 200px;
   background-color: ${(props) => props.bgColor};
   border-radius: 100px;
+  border: 1px solid ${(props) => props.borderColor};
 `;
 
-//interface: 객체모양(object shape)을 TypeScript에게 설명해주는 TypeScript의 개념
-//과거에는 const x = (a:number, b:number) => a+b
 interface CircleProps {
-  bgColor: string;
+  bgColor: string; //required
+  borderColor?: string; //optional ==> undefined 될 수 있음.
+  text?: string;
 }
 
 interface ContainerProps {
   bgColor: string;
+  borderColor: string;
 }
 
-function Circle({ bgColor }: CircleProps) {
-  return <Container bgColor={bgColor}></Container>;
+//원한다면 default 값을 argument에서 설정 가능: text 참고
+function Circle({ bgColor, borderColor, text = "default text" }: CircleProps) {
+  return (
+    <Container
+      bgColor={bgColor}
+      //CircleProps에서는 borderColor가 optional한데 ContainerProps에서는 require ==> 오류가 뜬다.
+      //이 때 초기값을 주는 것. 만약 undefined된 상태라면 다른 값을 보낸다 (?? 뒤에 입력 == bgColor)
+      borderColor={borderColor ?? bgColor}
+    >
+      {text}
+    </Container>
+  );
 }
 
 export default Circle;
-
-//연습
-interface PlayerShape {
-  name: string;
-  age: number;
-}
-
-const sayHello = (playerObj: PlayerShape) =>
-  `Hello ${playerObj.name} you are ${playerObj.age} years old.`;
-
-console.log(sayHello({ name: "kang", age: 32 }));
-
-//Proptypes와 유사하지만,
-//Interface는 Typescript와 코드가 실행되기 '전'에 확인해주는것
-//PropTypes는 코드 실행 '후' 브라우저에 에러가 나타난다.
