@@ -1,16 +1,14 @@
 #3 TYPESCRIPT
 
-#3.0 Introduction
+#3.1 DefinitelyTyped
 
-TypeScript는 JavaScript를 기반으로한 프로그래밍 언어, 새로운 기능만 조금 추가
+새로운 react app만들어서 typescript 설치
+npx create-react-app react-master --template typescript
 
-strongly-typed 언어: 프로그래밍 언어가 작동하기 전에 type을 확인
+styled-component 설치
+npm i --save-dev @types/styled-components
 
-javascript는 strongly-typed언어가 아니기 때문에 데이터 타입을 신경 쓰지 않았음
+(만약 어떤 라이브러리나 패키지를 사용하고 싶은데 DefinitelyTyped에 없다면, 그리고 그것을 TypeScript에서 사용하고 싶으면 코드를 push해주면 됨)
 
-const plus = (a:number, b:number) => a+b;
 
-브라우저는 TypeScript를 전혀 이해하지 못함 (위 코드를 콘솔창에 치면 오류)
-
-하지만 사용자에게 publish 해야할때 TypeScript가 compile해서 평범한 JavaScript로 만들어준다.
 
