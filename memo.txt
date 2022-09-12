@@ -1,11 +1,22 @@
-#4.0 Setup
+#4.4 Route States
 
-1. React RouterDom 설치: npm i react-router-dom react-query
+state는 우리가 Coins 화면을 열 때와, Coin 화면으로 넘어갈 때 생성된다.
 
-Nested(중첩된) Router란, 한 스크린 내에 또 다른 Router를 가질 수 있음을 의미
+Coins화면, 즉 Home에 있을 때랑 뭔가를 클릭해서 이동할 때 state가 home에서 다른 화면으로 보내지는 것.
 
-2. src안에 routes 폴더 만들기 (coin.tsx, coins.tsx)
+하지만 문제는, 만약 시크릿 창으로 화면을 열어보면 에러가 날 것 이다.
 
-3. 바깥에 Router.tsx 폴더 생성
+name이 undefined 된 문제: state가 정의되지 않아서임.
 
-4. npm i --save-dev @types/react-router-dom //6버전으로 진행시 설치하지 않아도 타입을 불러옴
+만약 누군가가 Coin 페이지로 바로 접속하려고 하면 에러가 날 것인데, 이유는 state가 생성되려면 Home 화면을 먼저 열어야 하기 때문이다.
+
+클릭할 때 state가 만들어지니까 그 다음에야 Coin화면이 state를 가져서 title도 보여줄 수 있는 것.
+
+==>이를 해결하기 위해서
+
+<Title>{state.name}</Title>을 밑으로 바꾼다
+
+<Title>{state?.name || "Loading.."}</Title>
+
+==> state가 존재하면 name을 가져오고, state가 존재하지 않을때는 Loading을 보여주는 것. 
+따라서 시크릿모드에서 상세화면 URL을 바로 치고 들어오면 Loading화면만 보게 될 것이고, Home 화면을 통해서 들어온다면 클릭을 통해 생성된 state를 볼 수 있을 것이다.
