@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import { useLocation } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -32,14 +32,25 @@ interface RouteState {
   };
 }
 
-//원한다면 link를 통해서 다른 화면에 정보를 보낼 수 도 있음 (state)
 function Coin() {
   const { coinId } = useParams();
   const [loading, setLoading] = useState(true);
-  //const location = useLocation();
-  //console.log(location);
   const { state } = useLocation() as RouteState;
-  //console.log(state);
+  const [info, setInfo] = useState({});
+  const [priceInfo, setPriceInfo] = useState({});
+
+  useEffect(() => {
+    (async () => {
+      const infoData = await (
+        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
+      ).json();
+      const priceData = await (
+        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
+      ).json();
+      setInfo(infoData);
+      setPriceInfo(priceData);
+    })();
+  }, []);
 
   return (
     <Container>
