@@ -1,14 +1,11 @@
-#3 TYPESCRIPT
+#4.0 Setup
 
-#3.1 DefinitelyTyped
+1. React RouterDom 설치: npm i react-router-dom react-query
 
-새로운 react app만들어서 typescript 설치
-npx create-react-app react-master --template typescript
+Nested(중첩된) Router란, 한 스크린 내에 또 다른 Router를 가질 수 있음을 의미
 
-styled-component 설치
-npm i --save-dev @types/styled-components
+2. src안에 routes 폴더 만들기 (coin.tsx, coins.tsx)
 
-(만약 어떤 라이브러리나 패키지를 사용하고 싶은데 DefinitelyTyped에 없다면, 그리고 그것을 TypeScript에서 사용하고 싶으면 코드를 push해주면 됨)
+3. 바깥에 Router.tsx 폴더 생성
 
-
-
+4. npm i --save-dev @types/react-router-dom //6버전으로 진행시 설치하지 않아도 타입을 불러옴
