@@ -6,6 +6,8 @@ import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
 import { Link, useMatch } from "react-router-dom";
+import { useQuery } from "react-query";
+import { fetchCoinInfo, fetchCoinTickers } from "./api";
 
 const Overview = styled.div`
   display: flex;
@@ -138,38 +140,30 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
+type IParams = { coinId: string };
+
 function Coin() {
-  const { coinId } = useParams();
-  const [loading, setLoading] = useState(true);
+  const { coinId } = useParams() as IParams;
   const { state } = useLocation() as RouteState;
-  const [info, setInfo] = useState<InfoData>();
-  const [priceInfo, setPriceInfo] = useState<PriceData>();
   const priceMatch = useMatch("/:coinId/price");
   const chartMatch = useMatch("/:coinId/chart");
-  //내가 선택한 URL에 들어가 있다면 object를 받는다. 있지 않으면 null을 받음
-  //console.log(priceMatch);
 
-  useEffect(() => {
-    (async () => {
-      const infoData = await (
-        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-      ).json();
-      const priceData = await (
-        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      ).json();
-      setInfo(infoData);
-      setPriceInfo(priceData);
-      setLoading(false);
-    })();
-  }, [coinId]);
-  //coinId를 사용하고 있다고 알려주고 있음. ==> 만약 coinId가 변한다면 위 코드들이 다시 실행된다.
-  //사실 이 코드에서는 []나 [coinId]는 같다. 왜냐하면 coinId가 변하면 동작할텐데, coinId는 URL에 위치해서 절대 변하지 않기 때문이다.
+  //모든 query는 각각의 고유한 id를 갖고 있어야 하기 때문에 배열 사용
+  const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+    ["info", coinId],
+    () => fetchCoinInfo(coinId)
+  );
+  const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
+    ["tickers", coinId],
+    () => fetchCoinTickers(coinId)
+  );
 
+  const loading = infoLoading || tickersLoading;
   return (
     <Container>
       <Header>
         <Title>
-          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
       {loading ? (
@@ -179,26 +173,26 @@ function Coin() {
           <Overview>
             <OverviewItem>
               <span>Rank:</span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Symbol:</span>
-              <span>${info?.symbol}</span>
+              <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Open Source:</span>
-              <span>{info?.open_source ? "Yes" : "No"}</span>
+              <span>{infoData?.open_source ? "Yes" : "No"}</span>
             </OverviewItem>
           </Overview>
-          <Description>{info?.description}</Description>
+          <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
               <span>Total Suply:</span>
-              <span>{priceInfo?.total_supply}</span>
+              <span>{tickersData?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Max Supply:</span>
-              <span>{priceInfo?.max_supply}</span>
+              <span>{tickersData?.max_supply}</span>
             </OverviewItem>
           </Overview>
 
@@ -220,7 +214,5 @@ function Coin() {
     </Container>
   );
 }
-
-//Nested router 혹은 nested route == route안에 있는 또 다른 route
 
 export default Coin;

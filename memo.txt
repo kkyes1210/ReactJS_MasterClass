@@ -1,17 +1,16 @@
-#4.6 Data Types
+#4.10 React Query part Two
 
-console.log(infoData), console.log(priceData) 한 뒤에 
+//현재 coins만 react query를 사용했고 coin은 fetch만 사용한 상태
 
-콘솔창에서 우클릭 후 "전역 변수로 object 저장" 하면 temp1, temp2 등으로 저장이 된다.
+예를 들어 비트코인 화면에 들어간다고 하면 "Loading"문구가 나온다. 
 
-Object.keys(temp1).join()을 하면 string이 나오는 데 이것을 복사해서 interface에 넣어준다.
+(나왔다가 들어가는것을 계속 반복해도 문구가 뜸 ==> 비트코인 화면에 들어갈 때마다 API에 접근하는 것을 의미한다.)
 
-쉼표로 구분이 되어있는데 드래그후 ctrl+D (커서 뒤에) 해서 모두 선택하고 제거, 엔터 순서대로하면 일렬로 정리된다.
+하지만 비트코인 화면에서 나오면 Loading이 발생하지 않는 것을 볼 수 있다.
 
-이것을 모두 선택해서 alt shift i 후 :를 써준다. (지금까지는 이름(keys)을 받아온 것)
+==> fetching을 하는 coin screen과 react query가 하는 것이 다르기 때문에 발생하는 것.
+react query는 response를 "caching" 하고 있기 때문
 
-이제는 values를 받아볼건데, Object.values(temp1)은 데이터 값이므로 타입코드는 아래와 같다.
-
-Object.values(temp1).map(v=>typeof v).join()
-
-붙여넣기 한다음 똑같이 ctrl+D,제거,엔터 => alt shift i 후 붙여넣기를 해준다.
+**React query
+React query는 Devtools(Developer Tools, 개발자 도구) 라는 것을 가지고 있는데, Devtools는 render 할 수 있는 component이고
+React query에 있는 devtools를 import 해오면 나의 캐시에 있는 query를 볼 수 있다.

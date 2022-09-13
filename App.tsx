@@ -1,6 +1,7 @@
 import { prototype } from "events";
 import { createGlobalStyle } from "styled-components";
 import Router from "./Router";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 //https://github.com/zacanger/styled-reset/blob/master/src/index.ts
 //기본값 제거
@@ -75,6 +76,7 @@ function App() {
     <>
       <GlobalStyle />
       <Router />
+      <ReactQueryDevtools initialIsOpen={true} />
     </>
   );
 }
