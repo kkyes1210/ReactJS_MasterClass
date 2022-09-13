@@ -1,4 +1,17 @@
-function Chart() {
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { fetchCoinHistory } from "./api";
+
+interface ChartProps {
+  coinId: string;
+}
+
+function Chart({ coinId }: ChartProps) {
+  const { isLoading, data } = useQuery(["ohlcv", coinId], () =>
+    fetchCoinHistory(coinId)
+  );
+  //const params = useParams();
+  //console.log(params);
   return <h1>Chart</h1>;
 }
 export default Chart;
