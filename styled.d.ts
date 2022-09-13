@@ -1,8 +1,10 @@
-import { DefaultTheme } from "styled-components";
+import "styled-components";
 
-//https://flatuicolors.com/palette/gb
-export const theme: DefaultTheme = {
-  bgColor: "#2f3640",
-  textColor: "#f5f6fa",
-  accentColor: "#4cd137",
-};
+declare module "styled-components" {
+  export interface DefaultTheme {
+    textColor: string;
+    bgColor: string;
+    accentColor: string;
+    cardBgColor: string;
+  }
+}
