@@ -66,7 +66,11 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
-function Coins() {
+interface ICoinsProps {
+  toggleDark: () => void;
+}
+
+function Coins({ toggleDark }: ICoinsProps) {
   //여기에 존재하던 긴 코드들을 react query가 대체해준다.
   //useQuery라는 hook이 fetcher함수 fetchCoins를 불러오고 그리고 fetcher함수가 isLoading(boolean타입)이라면 실행, 그리고 json을 data에 넣어준다.
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
@@ -78,6 +82,7 @@ function Coins() {
       </Helmet>
       <Header>
         <Title>코인</Title>
+        <button onClick={toggleDark}>Toggle Dark Mode</button>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
