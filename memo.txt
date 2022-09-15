@@ -1,15 +1,13 @@
-#5.7 Form Validation
+#5.9 Custom Validation
 
-<input {...register("email", { required: true })} placeholder="email" />
+validate는 함수를 값으로 가질 건데, 이 함수는 인자로 항목에 현재 쓰여지고 있는 값을 받을 것이다. => true 나 false 반환
 
-HTML input태그에 required 라는 속성이 있다는 것을 알고 있어서
+validate: (value) => false
 
-<input {...register("email")} required placeholder="email" /> 으로 써줘도 된다. 
+==> 항상 false를 반환, 에러에 type:"validate" 가 뜰 것이다.
 
-화면으로 돌아가서 email에 입력을 하지 않고 submit을 하면 HTML이 보호해주지만 브라우저의 소스코드에서 required를 지워버리면 정상적으로 작동한다. (email에 입력값이 없어도)
+validate: (value) => !value.includes("kang") 
+kang이 아니면 true 반환
 
-=>사용자가 지원하지 않는 브라우저나 모바일에 있다면 보호해 주지 못할 것이다.
-
-==> 따라서 HTML에 의지하는 대신, 자바스크립트에서 validation 
-<input {...register("email", { required: true })} placeholder="email" />
-
+validate: (value) => "hello"
+문자열이면 false 반환
