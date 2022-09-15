@@ -1,28 +1,56 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import styled from "styled-components";
 
 function ToDoList() {
-  const { register, handleSubmit, formState } = useForm();
-  //handleSubmit이 validation을 담당하고 우리가 작성한 코드가 진행될 수 있게 해줄 것
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IForm>({
+    defaultValues: {
+      email: "@naver.com",
+    },
+  });
   const onValid = (data: any) => {
     console.log(data);
   };
-  console.log(formState.errors); //에러가 있다는 사실 + 어떤 종류의 에러인지
+  console.log(errors);
 
-  //handleSubmit은 두개의 인자를 받는데 하나는 데이터가 유효할 때 호출되는 함수(필수)
-  //또 다른 하나는 데이터가 유효하지 않을 때 호출되는 함수(필수X)
+  const Span = styled.span`
+    color: red;
+  `;
+
+  interface IForm {
+    email: string;
+    firstName: string;
+    lastName: string;
+    password: string;
+    password1: string;
+  }
+
   return (
     <div>
       <form
         style={{ display: "flex", flexDirection: "column" }}
         onSubmit={handleSubmit(onValid)}
       >
-        <input {...register("toDo")} placeholder="Write a to do" />
-        <input {...register("email", { required: true })} placeholder="email" />
         <input
-          {...register("firstName", { required: true, minLength: 10 })}
+          {...register("email", {
+            required: "Email is require",
+            pattern: {
+              value: /^[A-Za-z0-9._%+-]+@naver.com$/,
+              message: "Only naver.com emails allowed.",
+            },
+          })}
+          placeholder="email"
+        />
+        <Span>{errors?.email?.message}</Span>
+        <input
+          {...register("firstName", { required: "Write here", minLength: 10 })}
           placeholder="first Name"
         />
+        <Span>{errors?.firstName?.message}</Span>
         <input
           {...register("lastName", {
             required: "lastName is required",
@@ -33,6 +61,23 @@ function ToDoList() {
           })}
           placeholder="last Name"
         />
+        <Span>{errors?.lastName?.message}</Span>
+        <input
+          {...register("password", {
+            required: "Write here",
+            minLength: 5,
+          })}
+          placeholder="password"
+        ></input>
+        <Span>{errors?.password?.message}</Span>
+        <input
+          {...register("password1", {
+            required: "Write here",
+            minLength: 5,
+          })}
+          placeholder="password1"
+        ></input>
+        <Span>{errors?.password1?.message}</Span>
         <button>Add</button>
       </form>
     </div>
