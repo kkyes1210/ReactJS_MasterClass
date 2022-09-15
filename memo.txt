@@ -1,8 +1,6 @@
-#5.10 Recap
+#5.11 Add To Do
 
-1. useForm 호출
-2. useForm 호출하면 register와 handleSubmit 제공
-3. register 함수를 form에 있는 모든 input에서 호출
+setToDos 함수는 두개의 동작을 할 수 있다.
 
-shoudFocus: 사용자가 form을 submit 할 때 에러를 발생시키면 커서를 해당 input에 focus
-setValue: submit 하면 문자열 설정해줌
+1. state를 직접적으로 설정
+2. 다른 함수를 받을 수 있음 ==> 함수의 리턴 값이 새로운 state
