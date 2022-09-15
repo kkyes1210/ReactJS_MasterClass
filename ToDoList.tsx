@@ -1,24 +1,18 @@
 import { useState } from "react";
-
-//또 다른 input이 있다면, 또 다른 onChange를 만들어야 한다. (반복해서)
-//다음 시간에는 이 모든 것을 한 줄로 할 수 있는 라이브러리 소개
+import { useForm } from "react-hook-form";
 
 function ToDoList() {
-  const [toDo, setToDo] = useState("");
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const {
-      currentTarget: { value },
-    } = event;
-    setToDo(toDo);
-  };
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
-
+  const { register, watch } = useForm();
+  //console.log(register("toDo"));
+  //watch는 form의 입력값들의 변화를 관찰 할 수 있게 해주는 함수
+  console.log(watch());
   return (
     <div>
-      <form onSubmit={onSubmit}>
-        <input onChange={onChange} value={toDo} placeholder="Write a to do" />
+      <form>
+        <input {...register("toDo")} placeholder="Write a to do" />
+        <input {...register("email")} placeholder="email" />
+        <input {...register("firstName")} placeholder="first Name" />
+        <input {...register("lastName")} placeholder="last Name" />
         <button>Add</button>
       </form>
     </div>

@@ -1,20 +1,8 @@
-#5.1 Dark Mode part Two
+#5.6 Forms
 
-isDark 하나 보내려면 App->Router->Coin->Chart 까지 복잡하고 많은 과정이 필요하다.
+react-hook-form: 리액트에서 form으로 작업하기에 좋은 방법, 긴 코드를 한 줄의 코드로 가능하게 해준다.
 
-대부분의 경우 어플리케이션 전체에서 무언가를 공유해야 할 때가 있을것. 예를들어 유저의 로그인 여부
+정말 큰 form,  form validation(검증)이 많을 때 좋다.
 
-유저가 로그인했다면, 많은 component에서 보이는 모습이 달라져야 할것이다.
-
-그런데 지금 이 방식대로 일반적인 React state를 사용한다면 어플리케이션은 로그인 아이디를 모두에게 직접 공유해야한다.
-
-더 많은 screen, prop을 더더욱 많은 screen과 component로 보낸다면 좋은 방법이 절대 아닐 것이다.
-
-==> 이러한 이유로 state management가 필요
-
-isDark: App -> Router -> Coin -> Chart 
-
-Header -> (isDark) <- Chart 
-
-이렇게 부모가 자식에게 prop을 내려주는 계층 구조 대신에 state를 Chart가 접근 할 수 있도록 하는 것이 목적!
+실제 앱에서는 많은 input을 요구할 것이다. ==> react-hook-form을 사용하지 않는다면 form에 많은 state들을 등록해야 할 것 이고 form validation이 필요할 것
 
