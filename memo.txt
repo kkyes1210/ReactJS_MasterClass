@@ -1,13 +1,8 @@
-#5.9 Custom Validation
+#5.10 Recap
 
-validate는 함수를 값으로 가질 건데, 이 함수는 인자로 항목에 현재 쓰여지고 있는 값을 받을 것이다. => true 나 false 반환
+1. useForm 호출
+2. useForm 호출하면 register와 handleSubmit 제공
+3. register 함수를 form에 있는 모든 input에서 호출
 
-validate: (value) => false
-
-==> 항상 false를 반환, 에러에 type:"validate" 가 뜰 것이다.
-
-validate: (value) => !value.includes("kang") 
-kang이 아니면 true 반환
-
-validate: (value) => "hello"
-문자열이면 false 반환
+shoudFocus: 사용자가 form을 submit 할 때 에러를 발생시키면 커서를 해당 input에 focus
+setValue: submit 하면 문자열 설정해줌
