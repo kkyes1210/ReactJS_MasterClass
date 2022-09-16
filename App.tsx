@@ -2,15 +2,19 @@ import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { hourSelector, minuteState } from "./atoms";
 
+//atom이나 selector로 useRecoilState를 쓸 때
+//array의 첫번째 item은 atom의 값 or selector의 get함수의 값
+//array의 두번째 요소는 atom을 수정하는 함수 or selector의 set property 실행시키는 함수
 function App() {
-  //minutes은 atoms에서 선언한 것처럼 number타입이지만(default:0)
-  //setMinutes에서 넘어오는 값은 string (event.currentTarget.value)
-  //+를 붙여주는데, string을 number로 바꿔준다.
   const [minutes, setMinutes] = useRecoilState(minuteState);
-  const hours = useRecoilValue(hourSelector);
+  const [hours, setHours] = useRecoilState(hourSelector);
   const onMinutesChange = (event: React.FormEvent<HTMLInputElement>) => {
     setMinutes(+event.currentTarget.value);
   };
+  const onHoursChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setHours(+event.currentTarget.value);
+  };
+
   return (
     <div>
       <input
@@ -19,11 +23,14 @@ function App() {
         type="number"
         placeholder="Minutes"
       />
-      <input value={hours} type="number" placeholder="Hours" />
+      <input
+        onChange={onHoursChange}
+        value={hours}
+        type="number"
+        placeholder="Hours"
+      />
     </div>
   );
 }
-//hours input에 onChangeEvent가 없어서 값을 읽기만 가능
-//현재코드를 실행하면 input이 읽기전용이라는 에러가 난다. (다음시간에 수정)
 
 export default App;
