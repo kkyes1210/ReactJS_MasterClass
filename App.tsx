@@ -41,11 +41,17 @@ const Card = styled.div`
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  /*const onDragEnd = (arg: any) => {
-    //console.log("draggin finished");
-    console.log(arg);
-  };*/
-  const onDragEnd = ({ destination, source }: DropResult) => {};
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (!destination) return; //유저가 같은 자리에 둘 수도 있음 (==destination이 없을 수도 있음)
+    setToDos((oldToDos) => {
+      const toDosCopy = [...oldToDos];
+      // 1) Delete item on source.index
+      toDosCopy.splice(source.index, 1);
+      // 2) Put back the item on the destination.index
+      toDosCopy.splice(destination?.index, 0, draggableId);
+      return toDosCopy;
+    });
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
@@ -54,7 +60,8 @@ function App() {
             {(magic) => (
               <Board ref={magic.innerRef} {...magic.droppableProps}>
                 {toDos.map((toDo, index) => (
-                  <Draggable key={index} draggableId={toDo} index={index}>
+                  //버그가 발생할 수도 있음 : draggable의 key가 draggableId 와 같아야 해서 발생
+                  <Draggable key={toDo} draggableId={toDo} index={index}>
                     {(magic) => (
                       <Card
                         ref={magic.innerRef}
