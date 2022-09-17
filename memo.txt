@@ -1,12 +1,17 @@
-#6.7 Performance
+#6.8 Multi Boards
 
-현재 문제점: react.js에서 components의 State가 변하면 해당 component의 모든 children은 다시 렌더링 된다.
+//console 창에서 실행
 
-console.log(toDo, "has been rendered") 하고 콘솔창을 보면 하나를 옮겨도 다 렌더링 되고 있음.
+const toDos = { x: ["a","b"], z:["n","t"]}
 
-//맨밑의 e와 f자리만 바꿔서 실행해보기
+Object.keys(toDos)
+-> ['x', 'z']
 
-=> Droppable, Board, DragDropContext등 부모 State가 바뀌면 Card는 다시 렌더링 (State가 바뀌면 모든것이 새로고침)
+Object.values(toDos)
+-> [Array(2), Array(2)]
 
-==> react memo사용: react.js한테 prop이 바뀌지 않는다면 컴포넌트를 렌더링 하지 말라고 함.
+toDos['x']
+-> ['a', 'b']
 
+Object.keys(toDos).map(boardId => toDos[boardId])
+-> [Array(2), Array(2)]
