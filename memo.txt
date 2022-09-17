@@ -1,23 +1,16 @@
-#5.15 Immutability part Two
+#6.5 Reordering
 
-배열의 원소를 어떻게 교체하는지에 관한 이론
+const x = ["a", "b", "c", "d", "e", "f"];
 
-원소를 교체하는 이유: 원소의 위치가 바뀌지 않길 바라기 때문이다.
+x.splice(0,1);
+['a']
+==> 인덱스 0에서 시작해서 1개를 삭제
 
-const food = ["pizza", "mango", "kimchi", "kimbab"]
+x
+['b', 'c', 'd', 'e', 'f']
 
-1. "mango"의 위치 구하기 ==> 1 (targetIndex)
+x.splice(3, 0, "a");
+==>index 3에서 시작해서 아무것도 지우지 않고 a를 집어 넣기
 
-2. 배열을 두 부분으로 나누기 
-const front= ["pizza"]
-const back = ["kimchi", "kimbab"]
-const final= [...front, "감", ...back]
-//여기서 그냥 front를 넣으면 배열안에 배열을 넣는다는 의미가 됨
-
-==> 따라서 원하는 목표의 index를 구하고, index이전의 모든 원소를 가져오고, index 이후의 모든 원소를 가져온 다음 그 둘을 연결하면서 사이에 새 원소를 넣는 것.
-
-const target = 1;
-food.slice(0,target)
-food.slice(target+1)
-[...food.slice(0,target), "감", ...food.slice(target+1)]
-
+x
+['b', 'c', 'd', 'a', 'e', 'f']
