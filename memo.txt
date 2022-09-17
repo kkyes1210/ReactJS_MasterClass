@@ -1,16 +1,12 @@
-#6.5 Reordering
+#6.7 Performance
 
-const x = ["a", "b", "c", "d", "e", "f"];
+현재 문제점: react.js에서 components의 State가 변하면 해당 component의 모든 children은 다시 렌더링 된다.
 
-x.splice(0,1);
-['a']
-==> 인덱스 0에서 시작해서 1개를 삭제
+console.log(toDo, "has been rendered") 하고 콘솔창을 보면 하나를 옮겨도 다 렌더링 되고 있음.
 
-x
-['b', 'c', 'd', 'e', 'f']
+//맨밑의 e와 f자리만 바꿔서 실행해보기
 
-x.splice(3, 0, "a");
-==>index 3에서 시작해서 아무것도 지우지 않고 a를 집어 넣기
+=> Droppable, Board, DragDropContext등 부모 State가 바뀌면 Card는 다시 렌더링 (State가 바뀌면 모든것이 새로고침)
 
-x
-['b', 'c', 'd', 'a', 'e', 'f']
+==> react memo사용: react.js한테 prop이 바뀌지 않는다면 컴포넌트를 렌더링 하지 말라고 함.
+
