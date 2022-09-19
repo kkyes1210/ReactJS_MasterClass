@@ -1,20 +1,10 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
-import { useRef } from "react";
+import { motion, useMotionValue } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 const Wrapper = styled(motion.div)`
   height: 100vh;
   width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const BiggerBox = styled.div`
-  width: 600px;
-  height: 600px;
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,26 +18,17 @@ const Box = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-const boxVariants = {
-  hover: { scale: 1.5, rotateZ: 90 },
-  click: { scale: 1, borderRadius: "100px" },
-};
-
+//Box를 움직여도, 컴포넌트는 재랜더링 되고 있지 않음 => useEffect 사용
 function App() {
-  const biggerBoxRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  useEffect(() => {
+    x.onChange(() => console.log(x.get()));
+  }, [x]);
+
   return (
     <Wrapper>
-      <BiggerBox ref={biggerBoxRef}>
-        <Box
-          drag
-          dragSnapToOrigin
-          dragElastic={1} //기본값은 0.5 , 당기는 힘이라고 생각하면 편하다. (낮을수록 움직임이 힘들어짐)
-          dragConstraints={biggerBoxRef}
-          variants={boxVariants}
-          whileHover="hover"
-          whileTap="click"
-        />
-      </BiggerBox>
+      <button onClick={() => x.set(200)}>click me</button>
+      <Box drag="x" dragSnapToOrigin style={{ x }} />
     </Wrapper>
   );
 }
