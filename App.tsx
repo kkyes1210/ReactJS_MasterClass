@@ -1,13 +1,14 @@
 import styled from "styled-components";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, useScroll } from "framer-motion";
 import { useEffect } from "react";
 
 const Wrapper = styled(motion.div)`
-  height: 100vh;
+  height: 200vh; //scroll할때 충분히 크지 않아서 길이를 늘렸음
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(135deg, rgb(238, 0, 153), rgb(221, 0, 238));
 `;
 
 const Box = styled(motion.div)`
@@ -20,14 +21,27 @@ const Box = styled(motion.div)`
 
 function App() {
   const x = useMotionValue(0);
-  const scale = useTransform(x, [-800, 0, 800], [2, 1, 0.1]);
+  const rotateZ = useTransform(x, [-800, 800], [-360, 360]);
+  const gradient = useTransform(
+    x,
+    [-800, 800],
+    [
+      "linear-gradient(135deg, rgb(0,210,238), #0f1eca)",
+      "linear-gradient(135deg, rgb(0, 238, 59), #d2bf5e)",
+    ]
+  );
+  /* const { scrollY, scrollYProgress } = useScroll();
   useEffect(() => {
-    scale.onChange(() => console.log(scale.get()));
-  }, [x]);
+    scrollY.onChange(() => {
+      console.log(scrollY.get(), scrollYProgress.get());
+    });
+  }, []); */
+  const { scrollYProgress } = useScroll();
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 5]);
 
   return (
-    <Wrapper>
-      <Box drag="x" dragSnapToOrigin style={{ x, scale }} />
+    <Wrapper style={{ background: gradient }}>
+      <Box drag="x" dragSnapToOrigin style={{ x, rotateZ, scale }} />
     </Wrapper>
   );
 }
