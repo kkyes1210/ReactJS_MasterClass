@@ -45,24 +45,28 @@ const Slider = styled.div`
 
 const Row = styled(motion.div)`
   display: grid;
-  gap: 10px;
+  gap: 5px;
   grid-template-columns: repeat(6, 1fr);
   position: absolute;
   width: 100%;
 `;
 
-const Box = styled(motion.div)`
+const Box = styled(motion.div)<{ bgPhoto: string }>`
   background-color: white;
   height: 120px;
-  color: red;
+  background-image: url(${(props) => props.bgPhoto});
+  background-size: cover;
+  background-position: center center;
   font-size: 64px;
 `;
 
 const rowVariants = {
-  hidden: { x: window.outerWidth + 10 },
+  hidden: { x: window.outerWidth + 5 },
   visible: { x: 0 },
-  exit: { x: -window.outerWidth - 10 },
+  exit: { x: -window.outerWidth - 5 },
 };
+
+const offset = 6; //한번에 보여주려는 영화의 수
 
 function Home() {
   const { data, isLoading } = useQuery<IGetMoivesResult>(
@@ -70,7 +74,20 @@ function Home() {
     getMovies
   );
   const [index, setIndex] = useState(0);
-  const increaseIndex = () => setIndex((prev) => prev + 1);
+
+  //클릭을 빠르게 두번하면 겹치는 버그가 생김
+  //=> 클릭을 두번 했을 때 원래 있던 Row가 채 사라지기도 전에 새 Row도 사라지려고 하기 때문
+  const [leaving, setLeaving] = useState(false);
+  const increaseIndex = () => {
+    if (data) {
+      if (leaving) return;
+      toggleLeaving();
+      const totalMoives = data?.results.length - 1; //home화면 영화 하나 빼줌 (-1)
+      const maxIndex = Math.ceil(totalMoives / offset) - 1;
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+  const toggleLeaving = () => setLeaving((prev) => !prev);
 
   return (
     <Wrapper>
@@ -86,7 +103,7 @@ function Home() {
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
           <Slider>
-            <AnimatePresence>
+            <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
               <Row
                 variants={rowVariants}
                 initial="hidden"
@@ -95,9 +112,15 @@ function Home() {
                 transition={{ type: "tween", duration: 1 }}
                 key={index}
               >
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <Box key={i}>{i}</Box>
-                ))}
+                {data?.results
+                  .slice(1)
+                  .slice(offset * index, offset * index + offset)
+                  .map((movie) => (
+                    <Box
+                      key={movie.id}
+                      bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                    />
+                  ))}
               </Row>
             </AnimatePresence>
           </Slider>
