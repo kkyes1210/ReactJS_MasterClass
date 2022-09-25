@@ -1,7 +1,8 @@
-import { Link, useMatch } from "react-router-dom";
+import { Link, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { motion, useAnimation, useScroll } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -49,14 +50,14 @@ const Item = styled.li`
   }
 `;
 
-const Search = styled.span`
+const Search = styled.form`
   color: white;
-  display: flex;
-  align-items: center;
-  position: relative;
   svg {
     height: 25px;
   }
+  display: flex;
+  align-items: center;
+  position: relative;
 `;
 
 const Circle = styled(motion.span)`
@@ -105,6 +106,10 @@ const navVariants = {
   },
 };
 
+interface IForm {
+  keyword: string;
+}
+
 function Header() {
   const homeMatch = useMatch("/");
   const tvMatch = useMatch("/tv");
@@ -114,19 +119,17 @@ function Header() {
   const { scrollY } = useScroll();
   const toggleSearch = () => {
     if (searchOpen) {
-      // trigger the close animation
       inputAnimation.start({
         scaleX: 0,
       });
     } else {
-      // trigger the open animation
       inputAnimation.start({ scaleX: 1 });
     }
     setSearchOpen((prev) => !prev);
   };
+
   useEffect(() => {
     scrollY.onChange(() => {
-      //console.log(scrollY.get())
       if (scrollY.get() > 80) {
         navAnimation.start("scroll");
       } else {
@@ -134,6 +137,12 @@ function Header() {
       }
     });
   }, [scrollY, navAnimation]);
+
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm<IForm>();
+  const onValid = (data: IForm) => {
+    navigate(`/search?keyword=${data.keyword}`);
+  };
 
   return (
     <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
@@ -151,17 +160,17 @@ function Header() {
         </Logo>
         <Items>
           <Item>
-            <Link to="/">Home {homeMatch && <Circle layoutId="circle" />}</Link>
+            <Link to="/">Home{homeMatch && <Circle layoutId="circle" />}</Link>
           </Item>
           <Item>
             <Link to="/tv">
-              Tv Shows {tvMatch && <Circle layoutId="circle" />}
+              Tv Shows{tvMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
         </Items>
       </Col>
       <Col>
-        <Search>
+        <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -210 : 0 }}
@@ -177,6 +186,7 @@ function Header() {
             ></path>
           </motion.svg>
           <Input
+            {...register("keyword", { required: true, minLength: 2 })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}
