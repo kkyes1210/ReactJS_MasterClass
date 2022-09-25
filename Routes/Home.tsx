@@ -58,6 +58,13 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center center;
   font-size: 64px;
+  //첫번째와 마지막 Box 포스터 잘리는 것 방지
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
 `;
 
 const rowVariants = {
@@ -66,7 +73,7 @@ const rowVariants = {
   exit: { x: -window.outerWidth - 5 },
 };
 
-const offset = 6; //한번에 보여주려는 영화의 수
+const offset = 6;
 
 function Home() {
   const { data, isLoading } = useQuery<IGetMoivesResult>(
@@ -75,20 +82,32 @@ function Home() {
   );
   const [index, setIndex] = useState(0);
 
-  //클릭을 빠르게 두번하면 겹치는 버그가 생김
-  //=> 클릭을 두번 했을 때 원래 있던 Row가 채 사라지기도 전에 새 Row도 사라지려고 하기 때문
   const [leaving, setLeaving] = useState(false);
   const increaseIndex = () => {
     if (data) {
       if (leaving) return;
       toggleLeaving();
-      const totalMoives = data?.results.length - 1; //home화면 영화 하나 빼줌 (-1)
+      const totalMoives = data?.results.length - 1;
       const maxIndex = Math.ceil(totalMoives / offset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
 
+  const BoxVariants = {
+    normal: {
+      scale: 1,
+    },
+    hover: {
+      scale: 1.3,
+      y: -50,
+      transition: {
+        delay: 0.5,
+        type: "tween",
+        duration: 0.3,
+      },
+    },
+  };
   return (
     <Wrapper>
       {isLoading ? (
@@ -118,6 +137,10 @@ function Home() {
                   .map((movie) => (
                     <Box
                       key={movie.id}
+                      variants={BoxVariants}
+                      whileHover="hover"
+                      initial="normal"
+                      transition={{ type: "tween" }}
                       bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
                     />
                   ))}
